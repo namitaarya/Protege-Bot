@@ -180,8 +180,8 @@ client.on("messageCreate", (message) => {
 
     
     var todaytest = new Date();
-    channel.message.send(getFormattedDate(todaytest));
-    channel.message.send(getFormattedTime(todaytest));
+    channel.message.send(`${getFormattedDate(todaytest)}`);
+    channel.message.send(`${getFormattedTime(todaytest)}`);
 
   }
 
