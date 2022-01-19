@@ -30,7 +30,7 @@ console.log("Database connected");
 
 client.once("ready", () => {
   console.log("Ready!");
-  client.guilds.cache.get(process.env.GUILD_ID).channels.cache.get(process.env.VERIFICATION_CHANNEL_ID).fetch();
+  //client.guilds.cache.get(process.env.GUILD_ID).channels.cache.get(process.env.VERIFICATION_CHANNEL_ID).fetch();
   console.log("Ready 2!");
 });
 
