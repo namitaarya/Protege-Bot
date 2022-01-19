@@ -39,7 +39,7 @@ setInterval(() => {
   var minutes = today.getMinutes()+30;
   if(minutes>=60) hours+=1;
   var seconds = today.getSeconds();
-  if (((hours)%24) == 17 && ((minutes)%60) == 42 && seconds == 0) { SendEvents(123456778543); }
+  if (((hours)%24) == 20 && ((minutes)%60) == 0 && seconds == 0) { SendEvents(123456778543); }
 }, 1000);
 
 
