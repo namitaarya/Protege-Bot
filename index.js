@@ -35,10 +35,11 @@ client.once("ready", () => {
 
 setInterval(() => {
   var today = new Date();
-  var hours = today.getHours();
-  var minutes = today.getMinutes();
+  var hours = today.getHours()+5;
+  var minutes = today.getMinutes()+30;
+  if(minutes>=60) hours+=1;
   var seconds = today.getSeconds();
-  if (((hours+5)%24) == 17 && ((minutes+30)%60) == 10 && seconds == 0) { SendEvents(123456778543); }
+  if (((hours)%24) == 17 && ((minutes)%60) == 42 && seconds == 0) { SendEvents(123456778543); }
 }, 1000);
 
 
@@ -169,20 +170,12 @@ client.on("messageCreate", (message) => {
 
   if (message.content === "..") {
 
-    const getFormattedTime = (date) => 
-    {
-      return date.toDate().toLocaleTimeString('en-US',{timeZone:'IST',hour12:true,hour:'numeric',minute:'numeric'})
-    }
-
-    const getFormattedDate = (date) => {
-      return date.toDate().toDateString()
-    }
-
     
     var todaytest = new Date();
-    channel.message.send(`${getFormattedDate(todaytest)}`);
-    channel.message.send(`${getFormattedTime(todaytest)}`);
-
+    var hourstest =(todaytest.getHours())+5;
+    var minutestest = (todaytest.getMinutes())+30;
+    if(minutestest>=60) {hourstest+=1;};
+    message.channel.send(`${hourstest%24} : ${minutestest%60}`);
   }
 
 
