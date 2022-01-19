@@ -168,10 +168,21 @@ client.on("messageCreate", (message) => {
   // }
 
   if (message.content === "..") {
+
+    const getFormattedTime = (date) => 
+    {
+      return date.toDate().toLocaleTimeString('en-US',{timeZone:'IST',hour12:true,hour:'numeric',minute:'numeric'})
+    }
+
+    const getFormattedDate = (date) => {
+      return date.toDate().toDateString()
+    }
+
+    
     var todaytest = new Date();
-    var hourstest = ((todaytest.getHours())+5)%24;
-    var minutestest = (todaytest.getMinutes()+30)%60;
-    message.channel.send(`${hourstest} : ${minutestest}`);
+    channel.message.send(getFormattedDate(todaytest));
+    channel.message.send(getFormattedTime(todaytest));
+
   }
 
 
