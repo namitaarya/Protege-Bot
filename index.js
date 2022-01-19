@@ -38,7 +38,7 @@ setInterval(() => {
   var hours = today.getHours();
   var minutes = today.getMinutes();
   var seconds = today.getSeconds();
-  if (hours == 17 && minutes == 5 && seconds == 0) { SendEvents(123456778543); }
+  if (((hours+5)%24) == 17 && ((minutes+30)%60) == 10 && seconds == 0) { SendEvents(123456778543); }
 }, 1000);
 
 
@@ -169,8 +169,8 @@ client.on("messageCreate", (message) => {
 
   if (message.content === "..") {
     var todaytest = new Date();
-    var hourstest = todaytest.getHours();
-    var minutestest = todaytest.getMinutes();
+    var hourstest = ((todaytest.getHours())+5)%24;
+    var minutestest = (todaytest.getMinutes()+30)%60;
     message.channel.send(`${hourstest} : ${minutestest}`);
   }
 
