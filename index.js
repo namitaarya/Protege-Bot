@@ -1,8 +1,8 @@
 const Discord = require("discord.js");
-const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] });
+const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MESSAGE_REACTIONS"] }, { partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 const mySecret = process.env["DISCORD_TOKEN"];
 const admin = require("firebase-admin");
-const { Timestamp } = require("firebase/firestore");
+const { Timestamp, connectFirestoreEmulator } = require("firebase/firestore");
 const randomStrings = require("randomstring");
 require('dotenv').config();
 require("firebase/firestore");
@@ -30,8 +30,9 @@ console.log("Database connected");
 
 client.once("ready", () => {
   console.log("Ready!");
+  client.guilds.cache.get(process.env.GUILD_ID).channels.cache.get(process.env.VERIFICATION_CHANNEL_ID).fetch();
+  console.log("Ready 2!");
 });
-
 
 setInterval(() => {
   var today = new Date();
@@ -161,16 +162,9 @@ async function SendEvents(ID) {
   });
 }
 
-client.on("messageCreate", (message) => {
+client.on("messageCreate", (message,reaction) => {
 
-
-  // if(Date.getUTCHours()==1 && Date.getUTCMinutes()==20){
-
-  // }
-
-  if (message.content === "..") {
-
-    
+  if (message.content === "..") {    
     var todaytest = new Date();
     var hourstest =(todaytest.getHours())+5;
     var minutestest = (todaytest.getMinutes())+30;
@@ -179,12 +173,70 @@ client.on("messageCreate", (message) => {
   }
 
 
-  if (message.content === ".events") {
+  if (message.content === ".events" && ((message.author.id===process.env.NAMITA_ID) || (message.author.id===process.env.SAMIKSHA_ID))) {
     SendEvents(123456778543);
   }
-  if (message.content === ".ping") {
+
+  if (message.content === ".ping" && ((message.author.id===process.env.NAMITA_ID) || (message.author.id===process.env.SAMIKSHA_ID))) {
     message.channel.send("Ping");
   }
+
+  const channelcheck = process.env.VERIFICATION_CHANNEL_ID;
+  if(message.channel.id==channelcheck){
+    message.react("🧑‍🏫");
+    console.log("reaction sent");
+    message.react("🧑‍🎓");
+  }
+
 });
 
+client.on('messageReactionAdd', (reaction, user) => {
+  console.log("reading reactions");
+  let message = reaction.message, emoji = reaction.emoji;
+
+  if (emoji.name == '🧑‍🏫' && ((user.id===process.env.NAMITA_ID) || (user.id===process.env.SAMIKSHA_ID))) {
+      
+          message.guild.members.fetch(message.author.id).then(member => {
+            member.roles.add('931587399086145646');
+            message.react("✅");
+            console.log(`${user.id}`);
+            console.log(`${message.author.id}`);
+          })
+          }
+
+else if (emoji.name == '🧑‍🎓' && ((user.id===process.env.SAMIKSHA_ID) || (user.id===process.env.NAMITA_ID))) {
+      
+            message.guild.members.fetch(message.author.id).then(member => {
+              member.roles.add('931588311712141402');
+              message.react('✅');
+              console.log(`${user.id}`);
+              console.log(`${message.author.id}`);
+            })
+            }
+        });
+
+        client.on('messageReactionRemove', (reaction, user) => {
+          console.log("gonna remove a reaction");
+          let message = reaction.message, emoji = reaction.emoji;
+        
+          if (emoji.name == '🧑‍🏫' && ((user.id===process.env.NAMITA_ID) || (user.id===process.env.SAMIKSHA_ID))) {
+              
+                  message.guild.members.fetch(message.author.id).then(member => {
+                    member.roles.remove('931587399086145646');
+                    
+                    console.log(`${user.id}`);
+                    console.log(`${message.author.id}`);
+                  })
+                  }
+        
+        else if (emoji.name == '🧑‍🎓' && ((user.id===process.env.SAMIKSHA_ID) || (user.id===process.env.NAMITA_ID))) {
+              
+                    message.guild.members.fetch(message.author.id).then(member => {
+                      member.roles.remove('931588311712141402');
+                      console.log(`${user.id}`);
+                      console.log(`${message.author.id}`);
+                    })
+                    }
+                });
+        
 client.login(process.env.DISCORD_TOKEN);
